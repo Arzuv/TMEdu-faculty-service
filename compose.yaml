@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  app:
+    container_name: ${COMPOSE_PROJECT_NAME}_postgres
+    build: .
+    volumes:
+      - ./data:/app/data
+    environment:
+      SQLITE_DATASOURCE_URL: jdbc:sqlite:/app/data/database.db
+      SQLITE_USER: user
+      SQLITE_PASS: password
+    networks:
+      - dev_net
+    ports:
+      - "8080:8080"
+    depends_on:
+      - app
+networks:
+  dev_net:
+    name: ${COMPOSE_PROJECT_NAME}_network
+

@@ -1,6 +1,16 @@
 spring:
   application:
     name: bank
+  datasource:
+    url: ${SQLITE_DATASOURCE_URL:jdbc:sqlite:./app/data/database.db}
+    username: ${SQLITE_USER:sqlite}
+    password: ${SQLITE_PASS:sqlite}
+    driver-class-name: org.sqlite.JDBC
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.community.dialect.SQLiteDialect
   graphql:
     cors:
       allow-credentials: true
@@ -9,7 +19,7 @@ spring:
       allowed-headers: '*'
       allowed-methods: '*'
       allowed-origins:
-        - http://localhost:4200
+        - ${FRONT_SERVICE:http://localhost:4200}
       allowed-origin-patterns: /**
 
 springdoc:
