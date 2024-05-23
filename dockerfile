@@ -1,7 +1,12 @@
+FROM openjdk:17-slim as deps
+
+WORKDIR /app
+
 COPY gradlew .
 COPY gradle gradle
 COPY build.gradle .
 COPY settings.gradle .
+COPY app app
 
 RUN set -xe \
     && apt-get update && apt-get install -y dos2unix \

@@ -1,21 +1,24 @@
-version: '3.8'
 services:
-  app:
-    container_name: ${COMPOSE_PROJECT_NAME}_postgres
+  facultyapplication:
+    container_name: ${COMPOSE_PROJECT_NAME}_faculty_service
     build: .
     volumes:
       - ./data:/app/data
     environment:
-      SQLITE_DATASOURCE_URL: jdbc:sqlite:/app/data/database.db
-      SQLITE_USER: user
-      SQLITE_PASS: password
+      SQLITE_DATASOURCE_URL: ${SQLITE_DATASOURCE_URL}
+      SQLITE_USER: ${SQLITE_USER}
+      SQLITE_PASS: ${SQLITE_PASS}
+      EUREKA_SERVICE_URL: ${EUREKA_SERVICE_URL}
     networks:
       - dev_net
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
     ports:
-      - "8080:8080"
-    depends_on:
-      - app
+      - "127.0.0.1:8081:8081"
+
 networks:
   dev_net:
     name: ${COMPOSE_PROJECT_NAME}_network
+    external: true
 
