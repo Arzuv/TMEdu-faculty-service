@@ -1,0 +1,10 @@
+project:
+  name: tm-edu-faculty
+  image:
+    name: arzuv/tm-edu-faculty-service
+    tag: latest
+  port: 8080
+
+env:
+  dev
+owner: arzuv-bahramov
