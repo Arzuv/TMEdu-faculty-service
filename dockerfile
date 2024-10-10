@@ -1,27 +1,17 @@
-FROM openjdk:17-slim as deps
-
-WORKDIR /app
-
-COPY gradlew .
-COPY gradle gradle
-COPY build.gradle .
-COPY settings.gradle .
-COPY app app
-
-RUN set -xe \
-    && apt-get update && apt-get install -y dos2unix \
-    && dos2unix gradlew \
-    && find ./ -name "*.java" | xargs dos2unix
-
-COPY src src
-
-RUN ./gradlew build
-
-
 FROM openjdk:17-slim
 
-WORKDIR /app
+ENV LANGUAGE='en_US:en'
 
-COPY --from=deps /app/build/libs/*.jar app.jar
+WORKDIR /deployments
 
-CMD ["java", "-jar", "app.jar"]
+COPY --chown=185 build/libs/* /deployments/
+
+EXPOSE 8080
+
+USER 185
+
+ENV JAVA_OPTS_APPEND="-Dserver.address=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
+ENV JAVA_APP_JAR="/deployments/tm-1.0-SNAPSHOT.jar"
+
+ENTRYPOINT ["sh", "-c", "java -jar ${JAVA_APP_JAR}"]
+

@@ -18,5 +18,8 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
-      - name: Install dependencies and run tests
-        run: mvn clean install
+      - name: Build TMEDu faculty service
+        run: ./gradlew build
+
+      - name: Run tests
+        run: ./gradlew test
