@@ -1,0 +1,6 @@
+apiVersion: v3
+name: tm-edu-faculty-redis-helm-chart
+description: helm chart by deploying tm-edu-faculty-redis
+type: application
+version: 1.23.1
+appVersion: "1.0.0-SNAPSHOT"

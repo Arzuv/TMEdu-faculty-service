@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.project.name }}-deployment
+  labels:
+    project: {{ .Values.project.name }}
+    env: {{ .Values.env }}
+    owner: {{ .Values.owner }}
+spec:
+  selector:
+    matchLabels:
+      project: {{ .Values.project.name }}
+  template:
+    metadata:
+      labels:
+        project: {{ .Values.project.name }}
+    spec:
+      containers:
+        - name: {{ .Values.project.name }}
+          image: {{ .Values.project.image}}:{{ .Values.project.image.tag }}
+          ports:
+            - containerPort: {{ .Values.project.port }}
+          volumeMounts:
+            - mountPath: /data
+              name: {{ .Values.project.name }}-data
+          command: [ "redis-server", "/data/redis.conf" ]
+      volumes:
+        - name: {{ .Values.project.name }}-data
+          persistentVolumeClaim:
+            claimName: redis-pvc

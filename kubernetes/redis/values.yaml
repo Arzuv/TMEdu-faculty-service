@@ -1,0 +1,9 @@
+project:
+  name: tm-edu-faculty-redis
+  image:
+    name: redis
+    tag: 6.2
+  port: 6379
+
+env: dev
+owner: arzuv-bahramov
