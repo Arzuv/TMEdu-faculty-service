@@ -3,7 +3,7 @@ package org.education.faculty.service;
 
 import org.education.faculty.config.FacultyServiceConfTest;
 import org.education.faculty.dao.entity.Faculty;
-import org.education.faculty.dto.FacultyRepository;
+import org.education.faculty.dao.repository.FacultyRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

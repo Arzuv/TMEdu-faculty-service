@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.education.faculty.dao.entity.Discipline;
 import org.education.faculty.dao.repository.DisciplineRepository;
+import org.education.faculty.dao.repository.FacultyRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.stream.StreamSupport;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class DisciplineService {
     final DisciplineRepository disciplineRepository;
+    final FacultyService facultyService;
 
     public List<Discipline> findAll() {
         log.info("Fetching all disciplines from Redis");
@@ -53,7 +55,15 @@ public class DisciplineService {
         if (Objects.isNull(discipline.getId())) {
             discipline.setId(UUID.randomUUID());
         }
+
+        if (!facultyService.isExistsFaculty(discipline.getFacultyId())) {
+            log.warn("Discipline with facultyID: {} not found for save discipline", discipline.getFacultyId());
+            throw new RuntimeException("Discipline with facultyID: {} not found for save discipline");
+        }
+
+        log.info("The faculty is exists in repository");
         discipline = disciplineRepository.save(discipline);
+        log.info("Successfully saved discipline with ID: {}", discipline.getId());
         return discipline;
     }
 

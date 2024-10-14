@@ -1,6 +1,6 @@
 package org.education.faculty.config;
 
-import org.education.faculty.dto.FacultyRepository;
+import org.education.faculty.dao.repository.FacultyRepository;
 import org.education.faculty.service.FacultyService;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;

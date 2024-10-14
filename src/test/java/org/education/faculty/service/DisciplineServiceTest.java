@@ -3,7 +3,7 @@ package org.education.faculty.service;
 import org.education.faculty.config.DisciplineServiceConfTest;
 import org.education.faculty.dao.entity.Discipline;
 import org.education.faculty.dao.entity.Faculty;
-import org.education.faculty.dto.DisciplineRepository;
+import org.education.faculty.dao.repository.DisciplineRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +17,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataRedisTest
@@ -27,6 +28,9 @@ public class DisciplineServiceTest extends RedisServiceTest {
 
     @Autowired
     private DisciplineService disciplineService;
+
+    @Autowired
+    private FacultyService facultyService;
 
     private Discipline testDiscipline;
     private Faculty testFaculty;
@@ -46,7 +50,8 @@ public class DisciplineServiceTest extends RedisServiceTest {
                 .name("Java")
                 .build();
 
-        disciplineRepository.save(testDiscipline);
+        facultyService.save(testFaculty);
+        disciplineService.save(testDiscipline);
     }
 
     @Test
@@ -73,10 +78,22 @@ public class DisciplineServiceTest extends RedisServiceTest {
     }
 
     @Test
-    void testSave() {
+    void testSaveWithNoFaculty() {
         Discipline newDiscipline = Discipline.builder()
                 .name("Physics")
                 .facultyId(UUID.randomUUID())
+                .build();
+        assertThrows(RuntimeException.class, () -> {
+            disciplineService.save(newDiscipline);
+        });
+
+    }
+
+    @Test
+    void testSave() {
+        Discipline newDiscipline = Discipline.builder()
+                .name("Physics")
+                .facultyId(testDiscipline.getFacultyId())
                 .build();
 
         Discipline savedDiscipline = disciplineService.save(newDiscipline);

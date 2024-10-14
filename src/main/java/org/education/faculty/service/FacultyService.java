@@ -62,7 +62,7 @@ public class FacultyService {
 
     public boolean deleteById(String id) {
         log.info("Deleting faculty with ID: {}", id);
-        if (facultyRepository.existsById(UUID.fromString(id))) {
+        if (isExistsFaculty(UUID.fromString(id))) {
             facultyRepository.deleteById(UUID.fromString(id));
             log.info("Successfully deleted faculty with ID: {}", id);
             return true;
@@ -70,5 +70,10 @@ public class FacultyService {
             log.warn("Faculty with ID: {} not found for deletion", id);
             return false;
         }
+    }
+
+    public boolean isExistsFaculty(UUID id) {
+        log.info("Checking is exists the faculty by id: {}", id);
+        return facultyRepository.existsById(id);
     }
 }
