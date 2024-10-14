@@ -1,16 +1,17 @@
 spring:
   application:
-    name: TM_Education_Faculty_service
-  datasource:
-    url: ${SQLITE_DATASOURCE_URL:jdbc:sqlite:./app/data/database.db}
-    username: ${SQLITE_USER:sqlite}
-    password: ${SQLITE_PASS:sqlite}
-    driver-class-name: org.sqlite.JDBC
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-    database-platform: org.hibernate.community.dialect.SQLiteDialect
+    name: TM-EDUCATION-FACULTY-SERVICE
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${TM_EDU_KEY_CLOACK_SERVICE:http://backend.keycloak.auth:8080}/auth/realms/tm_education_security
+  data:
+    redis:
+      host: ${TM_EDU_FACULTY_REDIS_HOST:localhost}
+      port: ${TM_EDU_FACULTY_REDIS_PORT:6379}
+      password: ${TM_EDU_FACULTY_REDIS_PASSWORD:admin}
+      timeout: ${TM_EDU_FACULTY_REDIS_TIMEOUT:5000}
 
 springdoc:
   swagger-ui:
@@ -21,7 +22,9 @@ springdoc:
 server:
   port: 8081
 eureka:
+  instance:
+    prefer-ip-address: true
   client:
     filter-only-up-instances: true
     service-url:
-      defaultZone: ${EUREKA_SERVICE_URL:http://localhost:8761/eureka/}
+      defaultZone: ${TM_EDU_EUREKA_SERVICE:http://localhost:8761}/eureka/
