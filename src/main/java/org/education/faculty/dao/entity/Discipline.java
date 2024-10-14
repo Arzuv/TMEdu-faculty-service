@@ -1,37 +1,33 @@
 package org.education.faculty.dao.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.RedisHash;
 
-@Data
-@ToString(callSuper = false)
+import java.io.Serializable;
+import java.util.UUID;
+
 @EqualsAndHashCode(callSuper = false)
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Entity
-@EntityListeners(AuditingEntityListener.class)
-public class Discipline extends Auditor {
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@RedisHash("discipline")
+public class Discipline extends Auditor implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    UUID id;
+
+    @NotNull
     String name;
-    Integer faculty_id;
+
+    @NotNull
+    UUID facultyId;
 }
