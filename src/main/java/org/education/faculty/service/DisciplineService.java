@@ -6,7 +6,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.education.faculty.dao.entity.Discipline;
 import org.education.faculty.dao.repository.DisciplineRepository;
-import org.education.faculty.dao.repository.FacultyRepository;
+import org.education.faculty.setting.AuditorService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +23,7 @@ import java.util.stream.StreamSupport;
 public class DisciplineService {
     final DisciplineRepository disciplineRepository;
     final FacultyService facultyService;
+    final AuditorService auditorService;
 
     public List<Discipline> findAll() {
         log.info("Fetching all disciplines from Redis");
@@ -62,6 +63,7 @@ public class DisciplineService {
         }
 
         log.info("The faculty is exists in repository");
+        auditorService.installAuditInfo(discipline);
         discipline = disciplineRepository.save(discipline);
         log.info("Successfully saved discipline with ID: {}", discipline.getId());
         return discipline;
@@ -71,6 +73,7 @@ public class DisciplineService {
         log.info("Updating discipline with ID: {}", id);
         if (disciplineRepository.existsById(UUID.fromString(id))) {
             discipline.setId(UUID.fromString(id));
+            auditorService.installAuditInfo(discipline);
             disciplineRepository.save(discipline);
             log.info("Successfully updated discipline with ID: {}", id);
             return Optional.of(discipline);

@@ -2,7 +2,6 @@ package org.education.faculty.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -17,17 +16,17 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    private static final String SCOPE_READ = "SCOPE_RESOURCE_READ";
-    private static final String SCOPE_ADMIN = "SCOPE_RESOURCE_ADMIN";
+    private static final String ROLE_USER = "USER";
+    private static final String ROLE_ADMIN = "ADMIN";
 
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, "/api/v1/**").hasAuthority(SCOPE_READ)
-                        .requestMatchers(HttpMethod.POST, "/api/v1/**").hasAuthority(SCOPE_ADMIN)
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/**").hasAuthority(SCOPE_ADMIN)
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/**").hasAuthority(SCOPE_ADMIN)
+                        .requestMatchers(HttpMethod.GET, "/api/v1/**").hasRole(ROLE_USER)
+                        .requestMatchers(HttpMethod.POST, "/api/v1/**").hasRole(ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/**").hasRole(ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/**").hasRole(ROLE_ADMIN)
                         .requestMatchers(HttpMethod.GET, "/v1/swagger-ui/**").permitAll()
                         .anyRequest()
                         .authenticated())

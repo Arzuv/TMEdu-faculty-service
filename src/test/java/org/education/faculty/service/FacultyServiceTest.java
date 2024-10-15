@@ -4,6 +4,7 @@ package org.education.faculty.service;
 import org.education.faculty.config.FacultyServiceConfTest;
 import org.education.faculty.dao.entity.Faculty;
 import org.education.faculty.dao.repository.FacultyRepository;
+import org.education.faculty.setting.AuditorService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class FacultyServiceTest extends RedisServiceTest {
 
     @Autowired
     private FacultyService facultyService;
+
+    @Autowired
+    private AuditorService auditorService;
 
     private Faculty testFaculty;
 

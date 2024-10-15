@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.education.faculty.dao.entity.Faculty;
 import org.education.faculty.dao.repository.FacultyRepository;
+import org.education.faculty.setting.AuditorService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.stream.StreamSupport;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class FacultyService {
     final FacultyRepository facultyRepository;
+    final AuditorService auditorService;
 
     public List<Faculty> findAll() {
         log.info("Fetching all faculties from Redis");
@@ -41,7 +43,11 @@ public class FacultyService {
         log.info("Saving faculty: {}", faculty);
         if (Objects.isNull(faculty.getId())) {
             faculty.setId(UUID.randomUUID());
+        } else {
+            log.warn("Faculty with id {} is exists already.", faculty.getId());
+            throw new RuntimeException(String.format("Faculty with id %s is exists already.", faculty.getId()));
         }
+        auditorService.installAuditInfo(faculty);
         faculty = facultyRepository.save(faculty);
         return faculty;
     }
@@ -51,6 +57,7 @@ public class FacultyService {
 
         if (facultyRepository.existsById(UUID.fromString(id))) {
             faculty.setId(UUID.fromString(id));
+            auditorService.installAuditInfo(faculty);
             faculty = facultyRepository.save(faculty);
             log.info("Successfully updated faculty with ID: {}", id);
             return Optional.of(faculty);
