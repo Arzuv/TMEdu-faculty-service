@@ -20,7 +20,7 @@ public class AuditorService {
 
     public void installAuditInfo(Auditor auditor) {
         String username = auditorAware.getCurrentAuditor().orElse("SYSTEM");
-        if (StringUtils.hasText(auditor.getCreatedBy())) {
+        if (!StringUtils.hasText(auditor.getCreatedBy())) {
             auditor.setCreatedBy(username);
             auditor.setCreatedAt(LocalDateTime.now());
         }
